@@ -1,9 +1,25 @@
-# observers/git_observer.py
+so far in psyDuck project I have created class in backend/models
 
-import subprocess
+class EventType(str, Enum):
+    GIT_CHANGE = "GIT_CHANGE"
+    BUILD_FAILED = "BUILD_FAILED"
+    BUILD_SUCCESS = "BUILD_SUCCESS"
+    FILE_OPENED = "FILE_OPENED"
+    FILE_SAVED = "FILE_SAVED"
+    USER_QUERY = "USER_QUERY"
 
+class Event(BaseModel):
+    type: EventType
+    timestamp: datetime
+    payload: dict
 
-class GitObserver:
+class GitContext(BaseModel):
+    current_branch: str
+    recent_commits: list[str]
+    diff_summary: str
+
+in backend/observers
+    class GitObserver:
 
     def __init__(self, repo_path: str):
         self.repo_path = repo_path

@@ -1,0 +1,9 @@
+from enum import Enum
+
+class EventType(str, Enum):
+    GIT_CHANGE = "GIT_CHANGE"
+    BUILD_FAILED = "BUILD_FAILED"
+    BUILD_SUCCESS = "BUILD_SUCCESS"
+    FILE_OPENED = "FILE_OPENED"
+    FILE_SAVED = "FILE_SAVED"
+    USER_QUERY = "USER_QUERY"
