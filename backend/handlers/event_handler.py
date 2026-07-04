@@ -1,20 +1,26 @@
-from backend.models.event import Event, EventType
 from backend.context.context_manager import ContextManager
+from backend.llm.prompt_builder import PromptBuilder
+from backend.llm.ollama_client import OllamaClient
+from backend.models.event import Event
 
 
 class EventHandler:
 
-    def __init__(self, context_manager: ContextManager):
-        self.context = context_manager
+    def __init__(
+        self,
+        context_manager: ContextManager,
+        llm: OllamaClient,
+    ):
+        self.context_manager = context_manager
+        self.prompt_builder = PromptBuilder()
+        self.llm = llm
 
     def handle(self, event: Event):
 
-        if event.type == EventType.GIT_CHANGE:
+        context = self.context_manager.build_context(event)
 
-            git_context = self.context.get_git_context()
+        prompt = self.prompt_builder.build(event, context)
 
-            print(git_context)
+        response = self.llm.generate(prompt)
 
-        elif event.type == EventType.FILE_SAVED:
-
-            print(event.payload)
+        print(response)

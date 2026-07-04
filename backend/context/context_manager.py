@@ -1,14 +1,23 @@
-from backend.observers.git_observer import GitObserver
+from backend.models.event import Event, EventType
+from backend.models.project_context import ProjectContext
 from backend.models.git_context import GitContext
+from backend.observers.git_observer import GitObserver
+
 
 class ContextManager:
 
     def __init__(self, repo_path: str):
-        self.git = GitObserver(repo_path)
+        self.git_observer = GitObserver(repo_path)
 
-    def get_git_context(self) -> GitContext:
-        return GitContext(
-            current_branch=self.git.get_current_branch(),
-            recent_commits=self.git.get_recent_commits(),
-            diff_summary=self.git.get_diff_summary()
-        )
+    def build_context(self, event: Event) -> ProjectContext:
+
+        context = ProjectContext()
+
+        if event.type == EventType.GIT_CHANGE:
+            context.git = GitContext(
+                current_branch=self.git_observer.get_current_branch(),
+                recent_commits=self.git_observer.get_recent_commits(),
+                diff_summary=self.git_observer.get_working_tree_summary()
+            )
+
+        return context

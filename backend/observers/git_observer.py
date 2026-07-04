@@ -32,7 +32,7 @@ class GitObserver:
         )
         return output.splitlines()
 
-    def get_diff_summary(self) -> str:
+    def get_working_tree_summary(self) -> str:
         return self._run_git_command(
             ["git", "diff", "--stat"]
         )
