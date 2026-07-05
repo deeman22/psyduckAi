@@ -17,7 +17,9 @@ class ContextManager:
             context.git = GitContext(
                 current_branch=self.git_observer.get_current_branch(),
                 recent_commits=self.git_observer.get_recent_commits(),
-                diff_summary=self.git_observer.get_working_tree_summary()
+                changed_files=self.git_observer.get_changed_files(),
+                diff_summary=self.git_observer.get_working_tree_summary(),
+                diff=self.git_observer.get_git_diff()
             )
-
-        return context
+            
+            return context
